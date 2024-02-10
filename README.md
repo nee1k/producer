@@ -16,12 +16,7 @@ This command performs several actions:
 - The subsequent commands manage a specific container named `producer`, ensuring it's removed if it already exists, then rebuilt and run with specific volume and name settings.
 
 ### Configuration
-
 Explain how to configure the application through the `config.ini` file. Mention the different sections and settings that can be adjusted to customize the application behavior.
-
-### Usage
-
-Provide examples of how to use the application. Include any relevant commands, as well as descriptions of any outputs and how to interpret them.
 
 ## Built With
 
