@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-import os
 import json
-from argparse import ArgumentParser, FileType
-from configparser import ConfigParser
+import os
+import socket
 from confluent_kafka import Producer
 
 
@@ -15,19 +14,10 @@ def delivery_callback(err, msg):
 
 
 if __name__ == '__main__':
-    # Parse the command line.
-    parser = ArgumentParser()
-    parser.add_argument('config_file', type=FileType('r'))
-    args = parser.parse_args()
+    conf = {'bootstrap.servers': 'localhost:29092',
+            'client.id': socket.gethostname()}
 
-    # Parse the configuration.
-    # See https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md
-    config_parser = ConfigParser()
-    config_parser.read_file(args.config_file)
-    config = dict(config_parser['default'])
-
-    # Create Producer instance
-    producer = Producer(config)
+    producer = Producer(conf)
 
     topic = "cpu"
     volume_mount_path = '/app/logs'
@@ -40,6 +30,7 @@ if __name__ == '__main__':
                     content = json.load(file)
                     for data in content:
                         data_to_send = json.dumps(data).encode('utf-8')  # Serialize and encode the entry dictionary
+                        print(data_to_send)
                         producer.produce(topic, value=data_to_send, callback=delivery_callback)
                         producer.poll(0)
 
