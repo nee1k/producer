@@ -1,21 +1,40 @@
-# Edge Device Data Stream Producer
+# Kafka Events Producer
 
-### Installing
+This project demonstrates how to create and produce Kafka events from data stored in a Docker volume. The project involves two main steps:
 
-A step-by-step series of examples that tell you how to get a development environment running:
-1. Clone the repository to your local machine.
-2. Navigate to the project directory.
-3. Use the following command to build and start the project:
+1. Creating logs and storing them in a Docker volume.
+2. Starting a Kafka service and producing the logs as Kafka events.
+
+## Prerequisites
+
+- Docker
+- Docker Compose
+
+## Setup
+
+### Step 1: Create Docker Volume and Store Logs
+
+1. Create a Docker volume named `icicle`.
+2. Run the `create_logs.py` script to store `cpu.json` and `metadata.json` in the Docker volume.
 
 ```bash
-docker-compose up --build && docker build -t kafka . && docker run --name kafka -v icicle:/app/logs kafka
+# Create the Docker volume
+docker volume create icicle
+
+# Build the Docker image
+docker-compose build
+
+# Run the create_logs.py script
+docker-compose up producer
+
 ```
 
-This command performs several actions:
-- `docker-compose up --build` builds and starts the containers defined in your `docker-compose.yml`.
-- The subsequent commands manage a specific container named `producer`, ensuring it's removed if it already exists, then rebuilt and run with specific volume and name settings.
+# Start Kafka and Zookeeper services
+```bash
+docker-compose up kafka zoo1
+```
 
-## Built With
-
-- [Docker](https://www.docker.com/) - Containerization platform
-- [Python](https://www.python.org/) - Programming language used
+# Run the create_kafka_events.py script
+```bash
+docker-compose run producer
+```
